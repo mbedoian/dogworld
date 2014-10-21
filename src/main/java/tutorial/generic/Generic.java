@@ -27,12 +27,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 // { "GenericRandom" })
 public class Generic {
 //	public static Item item1;
-	public static Item nyla;
-	public final static Block nylaBlock = new NylaBlock(Material.ground)
+	public static NylaItem nyla;
+	public static NylaBone nylaBone;
+	public final static Block nylaBlock = new NylaOre(Material.rock)
 			.setHardness(1.0F).setStepSound(Block.soundTypeGravel)
-			.setBlockName("nylaBlock")
+			.setBlockName("nylaOre")
 			.setCreativeTab(CreativeTabs.tabBlock)
-			.setBlockTextureName("generic:nylaBlock");
+			.setBlockTextureName("generic:nylaOre");
 
 	@Instance("Generic")
 	public static Generic instance;
@@ -42,21 +43,27 @@ public class Generic {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		nyla = new GenericItem();
+		nyla = new NylaItem();
 		nyla.setTextureName("generic:nyla");
+		nylaBone = new NylaBone();
+		nylaBone.setTextureName("generic:nylaBone");
 		GameRegistry.registerItem(nyla, "nyla");
+		GameRegistry.registerItem(nylaBone, "nylaBone");
 	}
 
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		proxy.registerRenderers();
 
-		ItemStack dirtStack = new ItemStack(Blocks.dirt);
-		ItemStack diamondsStack = new ItemStack(Items.diamond, 64);
-		ItemStack blackWoolStack = new ItemStack(Blocks.wool, 42, 15);
-
-		GameRegistry.addShapelessRecipe(diamondsStack, dirtStack);
+		ItemStack nylaStack = new ItemStack(nyla);
+		ItemStack boneStack = new ItemStack(Items.bone);
 		GameRegistry.registerBlock(nylaBlock, "NylaBlock");
+		GameRegistry.addSmelting(nylaBlock, new ItemStack(nyla), 0.1f);
+		GameRegistry.addRecipe(new ItemStack(nylaBone), 
+								"xxx",
+								"xyx",
+								"xxx", 'x', nylaStack, 'y', boneStack);
+								
 
 	}
 
